@@ -1,9 +1,9 @@
 (() => {
 	"use strict";
-	var contacts = [];
 	var contactStorage = localStorage.getItem("contacts")
-		? localStorage.getItem("contacts")
+		? JSON.parse(localStorage.getItem("contacts"))
 		: [];
+	console.log({ contactStorage });
 	// Fetch all the forms we want to apply custom Bootstrap validation styles to
 	const forms = document.querySelectorAll(".needs-validation");
 
@@ -16,21 +16,20 @@
 					event.preventDefault();
 					event.stopPropagation();
 				}
-				event.preventDefault();
+				// event.preventDefault();
 
 				const data = event.target;
 				console.log({ data });
 
 				let newContact = {};
 				for (let i = 0; i <= 6; i++) {
-					console.log(data[i].id, data[i].value);
+					// console.log(data[i].id, data[i].value);
 					newContact[data[i].id] = data[i].value;
 				}
 				contactStorage.push(newContact);
-				localStorage.setItem("contacts", contactStorage);
-				contacts.push(newContact);
+				localStorage.setItem("contacts", JSON.stringify(contactStorage));
 				// console.log({ newContact });
-				console.log({ contacts });
+				// console.log({ contactStorage });
 
 				form.classList.add("was-validated");
 			},
@@ -48,21 +47,63 @@
 	$(function () {
 		$("#dataGrid").dxDataGrid({
 			dataSource: contactStorage,
-			// keyExpr: "name",
+			columnMinWidth: 75,
 			columns: [
 				{
 					dataField: "name",
+					minWidth: 100,
 				},
 				{
 					dataField: "phone",
+					minWidth: 100,
 				},
 				{
 					dataField: "email",
+					minWidth: 150,
 				},
 				{
 					dataField: "address",
+					minWidth: 150,
+				},
+				{
+					dataField: "state",
+					width: 75,
+				},
+				// {
+				// 	dataField: "zip",
+				// 	width: 75,
+				// },
+				{
+					dataField: "notes",
+					minWidth: 200,
 				},
 			],
+			summary: {
+				totalItems: [
+					{
+						column: "name",
+						summaryType: "count",
+						displayFormat: `Contacts: {0}`,
+					},
+				],
+			},
+		});
+		var dataGrid = $("#dataGrid")
+			.dxDataGrid({
+				editing: {
+					mode: "row",
+					allowDeleting: true,
+					confirmDelete: false,
+				},
+			})
+			.dxDataGrid("instance");
+
+		$("#deleteRowButton").dxButton({
+			text: "Delete Row",
+			onClick: function () {
+				// Deletes the second row
+				dataGrid.deleteRow(1);
+			},
 		});
 	});
 })();
