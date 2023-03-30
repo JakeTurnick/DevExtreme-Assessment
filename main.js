@@ -1,7 +1,7 @@
 (() => {
 	"use strict";
-	var contactStorage = localStorage.getItem("contacts")
-		? JSON.parse(localStorage.getItem("contacts"))
+	var contactStorage = sessionStorage.getItem("contacts")
+		? JSON.parse(sessionStorage.getItem("contacts"))
 		: [];
 	console.log({ contactStorage });
 	// Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -27,7 +27,7 @@
 					newContact[data[i].id] = data[i].value;
 				}
 				contactStorage.push(newContact);
-				localStorage.setItem("contacts", JSON.stringify(contactStorage));
+				sessionStorage.setItem("contacts", JSON.stringify(contactStorage));
 				// console.log({ newContact });
 				// console.log({ contactStorage });
 
